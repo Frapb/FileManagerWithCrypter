@@ -1,0 +1,78 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace FileManager1
+{
+    public partial class Form2 : Form
+    {
+        private string _path;
+        private string _name;
+        private ListBox _list;
+
+        private int _type;
+
+        public Form2(string path, string text, ListBox listbox1,int type, Color color, string font, int size)
+        {
+            InitializeComponent();
+            _path = path;
+            _name = text;
+            _list = listbox1;
+           
+            _type = type;
+            if (size != null && font != null)
+                this.Font = new Font(font, size);
+            if (color != null)
+                this.BackColor = color;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //MessageBox.Show(_name +"\\"+textBox1.Text + Path.GetExtension(_path));
+                if (File.Exists(_path))
+                {
+                    File.Move(_path, _name + "\\" + textBox1.Text + Path.GetExtension(_path));
+                    if (_type == 1)
+                    {
+                        _list.Items.RemoveAt(_list.SelectedIndex);
+                        _list.Items.Add(textBox1.Text + Path.GetExtension(_path));
+                    }
+
+                }
+                else if (Directory.Exists(_path))
+                {
+                    Directory.Move(_path, _name + "\\" + textBox1.Text);
+                    if (_type == 1)
+                    {
+                        _list.Items.RemoveAt(_list.SelectedIndex);
+                        _list.Items.Add(textBox1.Text);
+                    }
+
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                Close();
+
+            }
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+    }
+}
